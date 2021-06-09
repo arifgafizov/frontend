@@ -14,7 +14,8 @@
         <!--        auth form-->
 
         <div class="q-pa-md q-gutter-sm">
-          <q-btn  align="right" label="Войти" color="primary" @click="layout = true" />
+          <q-btn  v-if="isAuth" label="Выйти" color="primary" @click="logout" />
+          <q-btn  v-else align="right" label="Войти" color="primary" @click="layout = true" />
 
           <q-dialog v-model="layout">
             <q-layout view="Lhh lpR fff" container class="bg-white">
@@ -119,36 +120,37 @@ import { mapState } from 'vuex';
 import { mapMutations } from 'vuex';
 
 export default {
-  Store,
+  // Store,
   data () {
     return {
       layout: false,
       left: true,
       username: null,
       password: null,
-
+      // isAuth: false,
       accept: false,
       tab: 'mails',
       splitterModel: 20
     }
   },
 
-  // computed: {
-  //   isAuth() {
-  //     return this.$store.state.a.isAuth;
-  //   },
-  computed: mapState([
-    // проксирует в this.isAuth доступ к store.state.isAuth
-    'isAuth'
-    // isAuth: state => state.isAuth
-
-  ]),
+  computed: {
+    isAuth() {
+      return this.$store.state.auth.isAuth;
+    }},
+  // computed: mapState([
+  //   // проксирует в this.isAuth доступ к store.state.isAuth
+  //   'isAuth'
+  //   // isAuth: state => state.isAuth
+  //
+  // ]),
 
   methods: {
-    ...mapMutations([
-      'auth', // `this.auth()` будет вызывать `this.$store.commit('auth')`
 
-    ]),
+    // ...mapMutations([
+    //   'auth', // `this.auth()` будет вызывать `this.$store.commit('auth')`
+    // //
+    // ]),
     onSubmit () {
 //          отправка пост запроса с данными username и password из формы
       this.$axios.post('/api/v1/users/auth/login/', {
@@ -160,7 +162,7 @@ export default {
         const token = response.data.token
 //              добавление токена авторизации в localStorage с ключом AUTH_TOKEN
         localStorage.setItem('AUTH_TOKEN', token)
-        this.auth()
+        this.$store.commit('auth/setAuth', true)
         this.layout = false
 
 
@@ -168,22 +170,6 @@ export default {
         console.log(error)
         alert(error)
       })
-      // if (this.accept !== true) {
-      //   this.$q.notify({
-      //     color: 'red-5',
-      //     textColor: 'white',
-      //     icon: 'warning',
-      //     message: 'You need to accept the license and terms first'
-      //   })
-      // }
-      // else {
-      //   this.$q.notify({
-      //     color: 'green-4',
-      //     textColor: 'white',
-      //     icon: 'cloud_done',
-      //     message: 'Submitted'
-      //   })
-      // }
     },
 
     onReset () {
@@ -191,7 +177,10 @@ export default {
       this.password = null
       // this.accept = false
     },
-
+    logout () {
+      localStorage.removeItem('AUTH_TOKEN')
+      this.$store.commit('auth/setAuth', false)
+    }
   }
 
 
