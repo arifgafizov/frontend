@@ -1,8 +1,6 @@
 import Vue from 'vue'
 import Vuex, {mapState} from 'vuex'
 
-// import example from './module-example'
-
 Vue.use(Vuex)
 
 /*
@@ -13,39 +11,30 @@ Vue.use(Vuex)
  * async/await or return a Promise which resolves
  * with the Store instance.
  */
-// const moduleA = {
-//   state: () => ({
-//     isAuth: false
-//   }),
-//   mutations: {
-//     auth (state) {
-//       state.isAuth = true
-//     }
-//   },
-  // actions: { ... },
-  // getters: { ... }
-// }
+const auth = {
+  namespaced: true,
+  state: () => ({
+    isAuth: !!localStorage.getItem('AUTH_TOKEN')
+  }),
+  mutations: {
+    setAuth (state, value) {
+      state.isAuth = value
+    }
+  },
+  actions: { },
+  getters: { }
+}
 
 export default function (/* { ssrContext } */) {
   const Store = new Vuex.Store({
     modules: {
-      // example
-      // a: moduleA
-
-      state: () => ({
-        isAuth: false
-      }),
-
-        mutations: {
-          auth (state) {
-            state.isAuth = true
-          }
+      auth
     },
 
     // enable strict mode (adds overhead!)
     // for dev mode only
     strict: process.env.DEBUGGING
-  }})
+  })
 
   return Store
 }
