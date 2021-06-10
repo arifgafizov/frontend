@@ -60,7 +60,11 @@
     </q-footer>
 
     <q-dialog v-model="layout">
-
+      <div>
+        <q-splitter
+          v-model="splitterModel"
+          style="height: 500px"
+        >
       <q-card style="width: 700px; max-width: 80vw;">
 
         <q-tabs
@@ -120,7 +124,6 @@
                   :rules="[ val => val && val.length > 0 || 'Поле не может быть пустым']"
                 />
 
-                <!--                        <q-toggle v-model="accept" label="I accept the license and terms" />-->
                 <br>
                 <q-separator />
                 <div  class="q-pa-md q-gutter-sm">
@@ -140,6 +143,10 @@
             </q-card-section>
 
             <q-card-section>
+            <div class="q-pa-md" style="max-width: 800px">
+             <q-form
+               @submit="onRegister"
+               class="q-gutter-md">
               <q-input
                 filled
                 v-model.trim="username"
@@ -158,12 +165,77 @@
                 :rules="[ val => val && val.length > 0 || 'Поле не может быть пустым']"
               />
 
+             <q-input
+                filled
+                v-model.trim="email"
+                label="ел. адрес *"
+                hint="ел. адрес"
+                lazy-rules
+                :rules="[ val => val && val.length > 0 || 'Поле не может быть пустым']"
+              />
+
+             <q-input
+                filled
+                v-model.trim="first_name"
+                label="имя *"
+                hint="имя"
+                lazy-rules
+                :rules="[ val => val && val.length > 0 || 'Поле не может быть пустым']"
+              />
+
+             <q-input
+                filled
+                v-model.trim="last_name"
+                label="фамилия *"
+                hint="фамилия"
+                lazy-rules
+                :rules="[ val => val && val.length > 0 || 'Поле не может быть пустым']"
+              />
+
+             <q-input
+                filled
+                v-model.trim="middle_name"
+                label="отчество *"
+                hint="отчество"
+                lazy-rules
+                :rules="[ val => val && val.length > 0 || 'Поле не может быть пустым']"
+              />
+
+              <q-input
+                filled
+                v-model.trim="phone_number"
+                label="телефон *"
+                hint="телефон"
+                lazy-rules
+                :rules="[ val => val && val.length > 0 || 'Поле не может быть пустым']"
+              />
+
+               <q-input
+                filled
+                v-model.trim="address"
+                label="адрес *"
+                hint="адрес"
+                lazy-rules
+                :rules="[ val => val && val.length > 0 || 'Поле не может быть пустым']"
+              />
+
+              <br>
+              <q-separator />
+              <div  class="q-pa-md q-gutter-sm">
+                <q-btn @click.prevent="onRegister" label="Зарегстрироваться" type="submit" color="primary"/>
+              </div>
+              </q-form>
+
+              </div>
+
             </q-card-section>
           </q-tab-panel>
 
         </q-tab-panels>
 
       </q-card>
+        </q-splitter>
+      </div>
     </q-dialog>
   </q-layout>
 </template>
@@ -178,9 +250,16 @@ export default {
     return {
       layout: false,
       left: true,
+
       username: null,
       password: null,
-      // isAuth: false,
+      email: null,
+      first_name: null,
+      last_name: null,
+      middle_name: null,
+      phone_number: null,
+      address: null,
+
       accept: false,
       tab: 'mails',
       splitterModel: 20
@@ -231,10 +310,33 @@ export default {
       this.password = null
       // this.accept = false
     },
+
     logout() {
       localStorage.removeItem('AUTH_TOKEN')
       this.$store.commit('auth/setAuth', false)
-    }
+    },
+
+    onRegister() {
+//          отправка пост запроса с данными username и password из формы
+      this.$axios.post('/api/v1//users/auth/register/', {
+        'username': this.username,
+        'password': this.password,
+        "email": this.email,
+        "first_name": this.first_name,
+        "last_name": this.last_name,
+        "middle_name": this.middle_name,
+        "phone_number": this.phone_number,
+        "address": this.address
+      }).then((response) => {
+        console.log(response)
+        this.layout = false
+
+      }).catch(function (error) {
+        console.log(error)
+        alert(error)
+      })
+    },
+
   }
 
 
