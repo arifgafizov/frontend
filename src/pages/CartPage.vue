@@ -6,16 +6,15 @@
       <div class="q-pa-md" style="max-width: 1000px">
         <q-list v-for="cart_product in cart_products" :key="cart_product.id" bordered separator>
 
-          <q-item
-            @delete="onDeleteCartProduct"
-            clickable v-ripple>
+          <q-item clickable v-ripple>
             <q-item-section>
               <q-item-label>{{ cart_product.title }}</q-item-label>
               <q-item-label caption>количество: {{ cart_product.quantity }},
                 цена: {{cart_product.price }} руб.</q-item-label>
             </q-item-section>
             <q-btn-group push>
-              <q-btn style="background: #1E90FF; color: white" push label="добавить" />
+              <q-btn @click.prevent="addToCart(cart_product.id)"
+                     style="background: #1E90FF; color: white" push label="добавить" />
               <q-btn @click.prevent="onDeleteCartProduct(cart_product.id)"
                      style="background: #DC143C; color: white" push label="удалить" type="delete" />
             </q-btn-group>
@@ -39,6 +38,28 @@ export default {
     },
 
   methods: {
+    addToCart: function (product_id) {
+//          сохранение в переменной токена авторизации полученного из localStorage
+      const token = localStorage.getItem('AUTH_TOKEN')
+//          отправка пост запроса с данными product id из формы
+      this.$axios.post('/api/v1/cart-products/', {
+          'product': product_id
+        },
+        {
+          headers: {
+            Authorization: "Token " + token
+          },
+        }
+      ).then((response) => {
+
+        console.log(response)
+
+      }).catch(function(error) {
+        console.log(error)
+        alert(error)
+       })
+    },
+
     onDeleteCartProduct (product_id) {
 //          сохранение в переменной токена авторизации полученного из localStorage
       const token = localStorage.getItem('AUTH_TOKEN')
