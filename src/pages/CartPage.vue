@@ -3,7 +3,7 @@
     <div class="text-h4">Корзина</div>
 
     <template>
-      <div class="q-pa-md" style="max-width: 850px">
+      <div class="q-pa-md" style="max-width: 1000px">
         <q-list v-for="cart_product in cart_products" :key="cart_product.id" bordered separator>
 
           <q-item clickable v-ripple>
@@ -12,6 +12,10 @@
               <q-item-label caption>количество: {{ cart_product.quantity }},
                 цена: {{cart_product.price }} руб.</q-item-label>
             </q-item-section>
+            <q-btn-group push>
+              <q-btn style="background: #1E90FF; color: white" push label="добавить" />
+              <q-btn style="background: #DC143C; color: white" push label="удалить" />
+            </q-btn-group>
           </q-item>
 
         </q-list>
