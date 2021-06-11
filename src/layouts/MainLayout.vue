@@ -31,15 +31,22 @@
         vertical
         class="text-teal"
       >
-        <router-link :to="{ name: 'PRODUCTS_LIST'}">
+        <router-link v-if="!isAuth" :to="{ name: 'PRODUCTS_LIST'}">
           <q-tab name="products" icon="table_view" label="Товары"/>
         </router-link>
-        <router-link :to="{ name: 'ORDERS_LIST'}">
-          <q-tab name="orders" icon="feed" label="Заказы"/>
-        </router-link>
-        <router-link :to="{ name: 'CART'}">
-          <q-tab name="cart" icon="shopping_cart" label="Корзина"/>
-        </router-link>
+
+        <template v-else>
+          <router-link :to="{ name: 'PRODUCTS_LIST'}">
+            <q-tab name="products" icon="table_view" label="Товары"/>
+          </router-link>
+          <router-link :to="{ name: 'ORDERS_LIST'}">
+            <q-tab name="orders" icon="feed" label="Заказы"/>
+          </router-link>
+          <router-link :to="{ name: 'CART'}">
+            <q-tab name="cart" icon="shopping_cart" label="Корзина"/>
+          </router-link>
+        </template>
+
       </q-tabs>
 
     </q-drawer>
