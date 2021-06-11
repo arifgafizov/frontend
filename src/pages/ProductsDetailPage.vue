@@ -32,7 +32,7 @@
               </div>
 
               <q-page-sticky position="bottom-right" :offset="[18, 18]">
-                <q-btn size="25px" round color="primary" icon="shopping_cart"/>
+                <q-btn @click.prevent="addToCart(id)" size="25px" round color="primary" icon="shopping_cart"/>
               </q-page-sticky>
             </q-page>
           </q-page-container>
@@ -55,6 +55,31 @@ export default {
       model: 2.3
     }
   },
+
+  methods: {
+    addToCart: function (product_id) {
+//          сохранение в переменной токена авторизации полученного из localStorage
+      const token = localStorage.getItem('AUTH_TOKEN')
+//          отправка пост запроса с данными product id из формы
+      this.$axios.post('/api/v1/cart-products/', {
+          'product': product_id
+        },
+        {
+          headers: {
+            Authorization: "Token " + token
+          },
+        }
+      ).then((response) => {
+
+        console.log(response)
+
+      }).catch(function (error) {
+        console.log(error)
+        alert(error)
+      })
+    }
+  },
+
   created() {
     this.id = location.pathname.split('/').pop()
     this.$axios.get('/api/v1/products/' + this.id
