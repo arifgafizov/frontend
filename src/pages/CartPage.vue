@@ -6,7 +6,9 @@
       <div class="q-pa-md" style="max-width: 1000px">
         <q-list v-for="cart_product in cart_products" :key="cart_product.id" bordered separator>
 
-          <q-item clickable v-ripple>
+          <q-item
+            @delete="onDeleteCartProduct"
+            clickable v-ripple>
             <q-item-section>
               <q-item-label>{{ cart_product.title }}</q-item-label>
               <q-item-label caption>количество: {{ cart_product.quantity }},
@@ -14,7 +16,8 @@
             </q-item-section>
             <q-btn-group push>
               <q-btn style="background: #1E90FF; color: white" push label="добавить" />
-              <q-btn style="background: #DC143C; color: white" push label="удалить" />
+              <q-btn @click.prevent="onDeleteCartProduct(cart_product.id)"
+                     style="background: #DC143C; color: white" push label="удалить" type="delete" />
             </q-btn-group>
           </q-item>
 
@@ -34,6 +37,30 @@ export default {
       cart_total_price: '',
       }
     },
+
+  methods: {
+    onDeleteCartProduct (product_id) {
+//          сохранение в переменной токена авторизации полученного из localStorage
+      const token = localStorage.getItem('AUTH_TOKEN')
+//        проходимся по cart_products используя find с функцией сравнения полученного product_id с id товара в корзине
+//        сохраняя найденный товар в переменной product
+      const product = this.cart_products.find(function (product) {
+        return product.id === product_id
+      })
+//        сохраняем в переменной productPosition id позиции в корзине
+      const productPosition = product.positions.pop().id
+//        отправляем delete запрос с id позиции в корзине
+      this.$axios.delete('/api/v1/cart-products/' + productPosition, {
+        headers: {
+          Authorization: "Token " + token
+        }
+      }).then(response => {
+        console.log(response)
+      }).catch(function(error) {
+        console.log(error)
+      })
+    },
+  },
 
   mounted() {
 
