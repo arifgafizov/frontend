@@ -1,6 +1,6 @@
 <template>
   <q-page>
-    <div class="text-h4">Корзина</div>
+    <div class="text-h4 text-center">Корзина</div>
 
     <template>
       <div class="q-pa-md" style="max-width: 1000px">
@@ -14,9 +14,9 @@
             </q-item-section>
             <q-btn-group push>
               <q-btn @click.prevent="addToCart(cart_product.id)"
-                     style="background: #1E90FF; color: white" push label="добавить" />
+                     color="light-blue-8" glossy push label="добавить" />
               <q-btn @click.prevent="onDeleteCartProduct(cart_product.id)"
-                     style="background: #DC143C; color: white" push label="удалить" type="delete" />
+                     color="red-9" glossy push label="удалить" type="delete" />
             </q-btn-group>
           </q-item>
 
