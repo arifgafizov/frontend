@@ -1,6 +1,42 @@
 <template>
   <q-page>
-    <div class="text-h4">Информация о заказе № {{ id }}</div>
+    <div v-if="isExist" >
+      <q-banner dense class="bg-light-blue-2">
+      <div class="text-h4 text-center">Информация о заказе № {{ id }}</div>
+      </q-banner>
+
+      <br>
+      <div class="text-body1">
+        <br>
+        <br>
+        <p class="text-h5">  Статус: {{ status }}</p>
+        <p class="text-weight-bold">  Общая стоимость: {{ total_price }} руб.</p>
+        <p>  Дата и время доставки: {{ delivery_at }}</p>
+        <p>  Адрес доставки: {{ address }} </p>
+        <p>  Контактный телефон: {{ phone }} </p>
+
+        <div class="q-pa-md" style="max-width: 1000px">
+          Содержимое заказа: <br>
+          <q-list v-for="product in products" :key="product.id">
+
+            <q-item clickable v-ripple>
+              <q-item-section>
+                <q-item-label class="text-body1 text-italic">Наименование: {{ product.title }}, количество:
+                  {{ product.quantity }}, цена: {{ product.price }}</q-item-label>
+              </q-item-section>
+
+            </q-item>
+
+          </q-list>
+        </div>
+
+        <br><br>
+        <q-btn v-if="status === 'created'" color="cyan-7" glossy label="Оплатить" />
+      </div>
+    </div>
+    <q-banner v-else dense class="bg-red-3">
+      <div class="text-h4 text-center">Страница не найдена. Ошибка 404</div>
+    </q-banner>
   </q-page>
 </template>
 
@@ -15,6 +51,7 @@ export default {
       delivery_at: '',
       total_price: '',
       products: {},
+      isExist: true
     }
   },
 
@@ -40,7 +77,7 @@ export default {
 
     }).catch((err) => {
       if (err.response?.status === 404) {
-        this.isActive = false
+        this.isExist = false
       } else {
         alert(err.response.status +" "+ err.response.statusText)
       }
