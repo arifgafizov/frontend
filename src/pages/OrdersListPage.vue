@@ -1,6 +1,6 @@
 <template>
   <q-page>
-    <div class="text-h4">Заказы</div>
+    <div class="text-h4 text-center">Заказы</div>
 
     <template>
       <div class="q-pa-md" style="max-width: 1000px">
@@ -12,7 +12,7 @@
               <q-item-label caption>статус заказа: {{ order.status }}, стоимость заказа: {{
                   order.total_price }} руб.</q-item-label>
             </q-item-section>
-
+              <q-btn v-if="order.status === 'created'" color="cyan-7" glossy label="Оплатить" />
           </q-item>
 
         </q-list>
