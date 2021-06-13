@@ -268,7 +268,7 @@ export default {
       address: null,
 
       accept: false,
-      tab: 'mails',
+      tab: 'login',
       splitterModel: 20
     }
   },
