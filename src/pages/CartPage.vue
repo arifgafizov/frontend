@@ -51,8 +51,8 @@ export default {
           },
         }
       ).then((response) => {
-
         console.log(response)
+        this.getCartProducts()
 
       }).catch(function(error) {
         console.log(error)
@@ -77,32 +77,18 @@ export default {
         }
       }).then(response => {
         console.log(response)
+        this.getCartProducts()
       }).catch(function(error) {
         console.log(error)
       })
     },
-  },
 
-  mounted() {
-
-    //    сохранение в переменной токена авторизации полученного из localStorage
-    const token = localStorage.getItem('AUTH_TOKEN')
-    //     отправка гет запроса в заголовке которого токен авторизации
+    getCartProducts () {
+      //    сохранение в переменной токена авторизации полученного из localStorage
+      const token = localStorage.getItem('AUTH_TOKEN')
+      //     отправка гет запроса в заголовке которого токен авторизации
 //          получение товаров в корзине
-    this.$axios.get('/api/v1/cart-products/', {
-      headers: {
-        Authorization: "Token " + token
-      }
-    }).then(response => {
-
-      console.log(response)
-//          добавление в cart_products списка товаров корзины полученного из response data
-      this.cart_products = response.data
-      console.log(this.cart_products)
-    }),
-
-//          получение общей цены товаров в корзине
-      this.$axios.get('/api/v1/cart-products/cart-total-price/', {
+      this.$axios.get('/api/v1/cart-products/', {
         headers: {
           Authorization: "Token " + token
         }
@@ -110,9 +96,32 @@ export default {
 
         console.log(response)
 //          добавление в cart_products списка товаров корзины полученного из response data
-        this.cart_total_price = response.data
-        console.log(this.cart_total_price)
-      })
+        this.cart_products = response.data
+        console.log(this.cart_products)
+      }),
+
+//          получение общей цены товаров в корзине
+        this.$axios.get('/api/v1/cart-products/cart-total-price/', {
+          headers: {
+            Authorization: "Token " + token
+          }
+        }).then(response => {
+
+          console.log(response)
+//          добавление в cart_products списка товаров корзины полученного из response data
+          this.cart_total_price = response.data
+          console.log(this.cart_total_price)
+        })
+    }
+  },
+
+  mounted() {
+    // редирект на главную страницу для не авторизованного пользователя
+    if (!this.$store.state.auth.isAuth) {
+      this.$router.push({ name: "PRODUCTS_LIST"})
+    }
+
+    this.getCartProducts()
 }
 }
 </script>
