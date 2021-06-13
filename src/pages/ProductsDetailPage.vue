@@ -1,7 +1,7 @@
 <template>
   <q-page>
     <template>
-      <div class="q-pa-md">
+      <div v-if="isExist" class="q-pa-md">
         <q-layout view="lhh LpR lff" container style="height: 900px" class="shadow-2 rounded-borders">
           <q-header class="bg-black">
             <q-toolbar>
@@ -38,6 +38,11 @@
           </q-page-container>
         </q-layout>
       </div>
+
+      <q-banner v-else dense class="bg-red-3">
+        <div class="text-h4 text-center">Страница не найдена. Ошибка 404</div>
+      </q-banner>
+
     </template>
   </q-page>
 </template>
@@ -52,6 +57,7 @@ export default {
       description: '',
       price: '',
       weight: '',
+      isExist: true,
       model: 2.3
     }
   },
@@ -93,7 +99,7 @@ export default {
 
     }).catch((err) => {
       if (err.response?.status === 404) {
-        this.isActive = false
+        this.isExist = false
       } else {
         alert(err.response.status + " " + err.response.statusText)
       }
