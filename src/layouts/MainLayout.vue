@@ -344,7 +344,28 @@ export default {
       })
     },
 
-  }
+  },
+
+  created() {
+    // проверка правильности токена авторизации
+//    сохранение в переменной токена авторизации полученного из localStorage
+    const token = localStorage.getItem('AUTH_TOKEN')
+//     отправка гет запроса в заголовке которого токен авторизации
+    this.$axios.get('/api/v1/users/auth/current/', {
+      headers: {
+        Authorization: "Token " + token
+      }
+    })
+      .then(({data}) => {
+        console.debug(data)
+        this.checkAuthLoading = false
+      }).catch((err) => {
+      if (err.response?.status === 401) {
+        this.logout()
+      } else {
+      }
+    })
+  },
 
 
 }
