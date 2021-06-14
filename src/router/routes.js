@@ -11,6 +11,7 @@ const routes = [
       { path: 'orders/:id', component: () => import('pages/OrdersDetailPage.vue') ,  name: 'ORDERS_DETAIL'},
       { path: 'payments', component: () => import('pages/PaymentsPage.vue') ,  name: 'PAYMENTS'},
       { path: 'cart', component: () => import('pages/CartPage.vue') ,  name: 'CART'},
+      { path: 'complete-signup', component: () => import('pages/CompleteSignUp.vue') ,  name: 'COMPLETE-SIGNUP'},
     ]
   },
 
