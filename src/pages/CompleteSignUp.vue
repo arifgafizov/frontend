@@ -14,6 +14,7 @@
               >
 
                 <q-input
+                  type="password"
                   rounded outlined
                   v-model.trim="password"
                   label="пароль *"
@@ -59,7 +60,6 @@ export default {
 
       }).catch(function (error) {
         console.log(error)
-        // console.log(this.uuid_token)
         alert(error)
 
       })
