@@ -63,17 +63,16 @@ export default {
         alert(error)
 
       })
-    },
-
+      },
 
     onReset() {
       this.password = null
+      },
     },
 
-    created() {
-      this.uuid_token = location.search.split('=').pop()
-      console.log(this.uuid_token)
-    }
+  created() {
+    this.uuid_token = location.search.split('=').pop()
+    console.log(this.uuid_token)
   }
 }
 </script>
