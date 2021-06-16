@@ -114,7 +114,7 @@
                 class="q-gutter-md"
               >
                 <q-input
-                  filled
+                  rounded outlined
                   v-model.trim="username"
                   label="логин *"
                   hint="Логин"
@@ -123,7 +123,8 @@
                 />
 
                 <q-input
-                  filled
+                  type="password"
+                  rounded outlined
                   v-model.trim="password"
                   label="пароль *"
                   hint="Пароль"
@@ -134,8 +135,8 @@
                 <br>
                 <q-separator />
                 <div  class="q-pa-md q-gutter-sm">
-                  <q-btn @click.prevent="onSubmit" label="Отправить" type="submit" color="primary"/>
-                  <q-btn label="Сброс" type="reset" color="primary" />
+                  <q-btn @click.prevent="onSubmit" label="Отправить" type="submit" color="primary" glossy rounded/>
+                  <q-btn label="Сброс" type="reset" color="primary" glossy rounded/>
                 </div>
               </q-form>
 
@@ -155,81 +156,78 @@
                @submit="onRegister"
                class="q-gutter-md">
               <q-input
-                filled
+                rounded outlined
                 v-model.trim="username"
                 label="логин *"
-                hint="Логин"
+                hint="Логин, обязательное поле"
                 lazy-rules
                 :rules="[ val => val && val.length > 0 || 'Поле не может быть пустым']"
               />
 
               <q-input
-                filled
+                type="password"
+                rounded outlined
                 v-model.trim="password"
                 label="пароль *"
-                hint="Пароль"
+                hint="Пароль, обязательное поле"
                 lazy-rules
                 :rules="[ val => val && val.length > 0 || 'Поле не может быть пустым']"
               />
 
              <q-input
-                filled
+                rounded outlined
                 v-model.trim="email"
-                label="ел. адрес *"
+                label="ел. адрес "
                 hint="ел. адрес"
                 lazy-rules
                 :rules="[ val => val && val.length > 0 || 'Поле не может быть пустым']"
               />
 
              <q-input
-                filled
+                rounded outlined
                 v-model.trim="first_name"
-                label="имя *"
+                label="имя "
                 hint="имя"
                 lazy-rules
-                :rules="[ val => val && val.length > 0 || 'Поле не может быть пустым']"
               />
 
              <q-input
-                filled
+                rounded outlined
                 v-model.trim="last_name"
-                label="фамилия *"
+                label="фамилия "
                 hint="фамилия"
                 lazy-rules
-                :rules="[ val => val && val.length > 0 || 'Поле не может быть пустым']"
               />
 
              <q-input
-                filled
+                rounded outlined
                 v-model.trim="middle_name"
-                label="отчество *"
+                label="отчество "
                 hint="отчество"
                 lazy-rules
-                :rules="[ val => val && val.length > 0 || 'Поле не может быть пустым']"
               />
 
               <q-input
-                filled
+                rounded outlined
                 v-model.trim="phone_number"
-                label="телефон *"
+                label="телефон "
                 hint="телефон"
                 lazy-rules
-                :rules="[ val => val && val.length > 0 || 'Поле не может быть пустым']"
               />
 
                <q-input
-                filled
+                rounded outlined
                 v-model.trim="address"
-                label="адрес *"
+                label="адрес "
                 hint="адрес"
                 lazy-rules
-                :rules="[ val => val && val.length > 0 || 'Поле не может быть пустым']"
               />
 
               <br>
               <q-separator />
               <div  class="q-pa-md q-gutter-sm">
-                <q-btn @click.prevent="onRegister" label="Зарегстрироваться" type="submit" color="primary"/>
+                <q-btn @click.prevent="onRegister" label="Зарегстрироваться" type="submit" color="primary"
+                       glossy rounded/>
               </div>
               </q-form>
 
@@ -243,6 +241,7 @@
       </q-card>
         </q-splitter>
       </div>
+
     </q-dialog>
   </q-layout>
 </template>
@@ -252,20 +251,19 @@ import {mapState} from 'vuex';
 import {mapMutations} from 'vuex';
 
 export default {
-  // Store,
   data() {
     return {
       layout: false,
       left: true,
 
-      username: null,
-      password: null,
-      email: null,
-      first_name: null,
-      last_name: null,
-      middle_name: null,
-      phone_number: null,
-      address: null,
+      username: '',
+      password: '',
+      email: '',
+      first_name: '',
+      last_name: '',
+      middle_name: '',
+      phone_number: '',
+      address: '',
 
       accept: false,
       tab: 'login',
@@ -315,7 +313,6 @@ export default {
     onReset() {
       this.username = null
       this.password = null
-      // this.accept = false
     },
 
     logout() {
@@ -336,6 +333,7 @@ export default {
         "address": this.address
       }).then((response) => {
         console.log(response)
+        alert('На вашу поту отправлено письмо с ссылкой для подтверждения пароля и завершения регистрации')
         this.layout = false
 
       }).catch(function (error) {
