@@ -14,7 +14,10 @@
         <!--        auth form-->
 
         <div class="q-pa-md q-gutter-sm">
-          <q-btn v-if="isAuth" label="Выйти" color="primary" @click="logout"/>
+          <template v-if="isAuth" >
+            <q-btn push color="white" text-color="primary" :label="username"/>
+            <q-btn label="Выйти" color="primary" @click="logout"/>
+          </template>
           <q-btn v-else align="right" label="Войти" color="primary" @click="layout = true"/>
 
 
