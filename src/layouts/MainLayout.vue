@@ -167,16 +167,6 @@
                 :rules="[ val => val && val.length > 0 || 'Поле не может быть пустым']"
               />
 
-              <q-input
-                type="password"
-                rounded outlined
-                v-model.trim="password"
-                label="пароль *"
-                hint="Пароль, обязательное поле"
-                lazy-rules
-                :rules="[ val => val && val.length > 0 || 'Поле не может быть пустым']"
-              />
-
              <q-input
                 rounded outlined
                 v-model.trim="email"
@@ -327,7 +317,6 @@ export default {
 //          отправка пост запроса с данными username и password из формы
       this.$axios.post('/api/v1//users/auth/register/', {
         'username': this.username,
-        'password': this.password,
         "email": this.email,
         "first_name": this.first_name,
         "last_name": this.last_name,
