@@ -104,7 +104,8 @@ export default {
     },
 
     onReset() {
-      this.password = null
+      this.password1 = null
+      this.password2 = null
       },
     },
 
