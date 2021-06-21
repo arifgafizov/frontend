@@ -46,10 +46,10 @@
 
           </q-card-section>
 
-    <div v-if="alert" class="q-pa-md q-gutter-sm">
+    <div v-if="passwordNotEqual" class="q-pa-md q-gutter-sm">
 
-      <q-dialog v-model="alert">
-        <q-card>
+      <q-dialog v-model="passwordNotEqual">
+        <q-card class="bg-white text-red-10" style="width: 700px; max-width: 80vw;">
           <q-card-section>
             <div class="text-h6">Ошибка</div>
           </q-card-section>
@@ -59,7 +59,7 @@
           </q-card-section>
 
           <q-card-actions align="right">
-            <q-btn flat label="OK" color="primary" v-close-popup />
+            <q-btn flat label="OK" color="red-10" v-close-popup />
           </q-card-actions>
         </q-card>
       </q-dialog>
@@ -78,7 +78,7 @@ export default {
       password2: null,
       uuid_token: null,
 
-      alert: false,
+      passwordNotEqual: false,
     }
   },
 
@@ -107,7 +107,7 @@ export default {
         })
       }
       else {
-        this.alert = true
+        this.passwordNotEqual = true
       }
     },
 
