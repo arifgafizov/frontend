@@ -236,6 +236,26 @@
       </div>
 
     </q-dialog>
+
+    <div v-if="sendMail" class="q-pa-md q-gutter-sm">
+
+      <q-dialog v-model="sendMail">
+        <q-card style="width: 700px; max-width: 80vw;">
+          <q-card-section>
+            <div class="text-h6">Завершение регистрации</div>
+          </q-card-section>
+
+          <q-card-section class="q-pt-none">
+            На вашу почту отправлено письмо с ссылкой для установления пароля и завершения регистрации
+          </q-card-section>
+
+          <q-card-actions align="right">
+            <q-btn flat label="OK" color="primary" v-close-popup />
+          </q-card-actions>
+        </q-card>
+      </q-dialog>
+
+    </div>
   </q-layout>
 </template>
 
@@ -260,7 +280,8 @@ export default {
 
       accept: false,
       tab: 'login',
-      splitterModel: 20
+      splitterModel: 20,
+      sendMail: false,
     }
   },
 
@@ -325,7 +346,8 @@ export default {
         "address": this.address
       }).then((response) => {
         console.log(response)
-        alert('На вашу поту отправлено письмо с ссылкой для подтверждения пароля и завершения регистрации')
+        this.sendMail = true
+        // alert('На вашу поту отправлено письмо с ссылкой для подтверждения пароля и завершения регистрации')
         this.layout = false
 
       }).catch(function (error) {
