@@ -91,6 +91,14 @@ export default {
           'password': this.password1,
         }).then((response) => {
           console.log(response)
+//              сохранение в переменной токена авторизации полученного из response data
+          const token = response.data.token
+//              добавление токена авторизации в localStorage с ключом AUTH_TOKEN
+          localStorage.setItem('AUTH_TOKEN', token)
+//              вызов мутации setAuth из модуля auth для присвоения true isAuth
+          this.$store.commit('auth/setAuth', true)
+//              редирект на главную страницу после успешной регистрации
+          this.$router.push({ name: "PRODUCTS_LIST"})
 
         }).catch(function (error) {
           console.log(error)
