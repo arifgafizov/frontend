@@ -347,7 +347,6 @@ export default {
       }).then((response) => {
         console.log(response)
         this.sendMail = true
-        // alert('На вашу поту отправлено письмо с ссылкой для подтверждения пароля и завершения регистрации')
         this.layout = false
 
       }).catch(function (error) {
