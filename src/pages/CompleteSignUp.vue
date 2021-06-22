@@ -101,8 +101,12 @@ export default {
           this.$router.push({ name: "PRODUCTS_LIST"})
 
         }).catch(function (error) {
-          console.log(error)
-          alert(error)
+          console.log(error.response)
+          if (error.response.data.expired) {
+            alert("Token not exist or expired.")
+            return
+          }
+          alert('Error something')
 
         })
       }
