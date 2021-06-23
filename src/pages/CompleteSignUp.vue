@@ -106,7 +106,7 @@ export default {
             alert("Token not exist or expired.")
             return
           }
-          alert('Error something')
+          alert('Something error')
 
         })
       }
