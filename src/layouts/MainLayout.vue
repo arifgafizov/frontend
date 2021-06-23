@@ -351,7 +351,23 @@ export default {
 
       }).catch(function (error) {
         console.log(error)
-        alert(error)
+        if (error.response.data.unique === "A user with that username already exists.") {
+          alert("A user with that username already exists.")
+          return
+        }
+        else if (error.response.data.unique === "this username is already reserved.") {
+          alert("This username is already reserved.")
+          return
+        }
+        else if (error.response.data.unique === "A user with that email already exists.") {
+          alert("A user with that email already exists.")
+          return
+        }
+        else if (error.response.data.unique === "this email is already reserved.") {
+          alert("This email is already reserved.")
+          return
+        }
+        alert('Something error')
       })
     },
 
