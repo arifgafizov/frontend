@@ -12,7 +12,7 @@
               <q-item-label caption>статус заказа: {{ order.status }}, стоимость заказа: {{
                   order.total_price }} руб.</q-item-label>
             </q-item-section>
-              <q-btn v-if="order.status === 'created'" color="cyan-7" glossy label="Оплатить" />
+              <q-btn v-if="order.status === 'created'" @click.prevent="toPaymentsPage(order.id)" color="cyan-7" glossy label="Оплатить" />
           </q-item>
 
         </q-list>
@@ -26,6 +26,12 @@ export default {
   data() {
     return {
       orders: [],
+    }
+  },
+
+  methods: {
+    toPaymentsPage (orderId) {
+      this.$router.push({name: 'PAYMENTS', query: {order_id: orderId}})
     }
   },
 
