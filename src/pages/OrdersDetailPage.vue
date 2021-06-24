@@ -31,7 +31,7 @@
         </div>
 
         <br><br>
-        <q-btn v-if="status === 'created'" color="cyan-7" glossy label="Оплатить" />
+        <q-btn v-if="status === 'created'" @click.prevent="toPaymentsPage(id)" color="cyan-7" glossy label="Оплатить" />
       </div>
     </div>
     <q-banner v-else dense class="bg-red-3">
@@ -52,6 +52,11 @@ export default {
       total_price: '',
       products: {},
       isExist: true
+    }
+  },
+  methods: {
+    toPaymentsPage (orderId) {
+      this.$router.push({name: 'PAYMENTS', query: {order_id: orderId}})
     }
   },
 
