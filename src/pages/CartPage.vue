@@ -116,13 +116,11 @@ export default {
   },
 
   mounted() {
-    // редирект на главную страницу для не авторизованного пользователя
-    if (!this.$store.state.auth.isAuth) {
-      this.$router.push({ name: "PRODUCTS_LIST"})
-    }
+    // редирект на главную страницу для не авторизованного пользователя с помощью action
+    this.$store.dispatch('auth/redirectNotAuth');
 
     this.getCartProducts()
-}
+  }
 }
 </script>
 
