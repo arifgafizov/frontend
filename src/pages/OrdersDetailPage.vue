@@ -87,6 +87,11 @@ export default {
         alert(err.response.status +" "+ err.response.statusText)
       }
     })
+  },
+
+  mounted() {
+    // редирект на главную страницу для не авторизованного пользователя с помощью action
+    this.$store.dispatch('auth/redirectNotAuth');
   }
 }
 </script>
