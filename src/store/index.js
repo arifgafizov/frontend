@@ -19,9 +19,18 @@ const auth = {
   mutations: {
     setAuth (state, value) {
       state.isAuth = value
+    },
+    redirectNotAuth (state) {
+      if (!state.isAuth) {
+        this.$router.push({ name: "PRODUCTS_LIST"})
+      }
     }
   },
-  actions: { },
+  actions: {
+    redirectNotAuth ({ commit }) {
+      commit('redirectNotAuth')
+    }
+  },
   getters: { }
 }
 
