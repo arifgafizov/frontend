@@ -36,6 +36,9 @@ export default {
   },
 
   mounted() {
+    // редирект на главную страницу для не авторизованного пользователя с помощью action
+    this.$store.dispatch('auth/redirectNotAuth');
+
     //    сохранение в переменной токена авторизации полученного из localStorage
     const token = localStorage.getItem('AUTH_TOKEN')
 
