@@ -12,6 +12,7 @@ const routes = [
       { path: 'payments', component: () => import('pages/PaymentsPage.vue') ,  name: 'PAYMENTS', meta: {needAuth: true}},
       { path: 'cart', component: () => import('pages/CartPage.vue') ,  name: 'CART', meta: {needAuth: true}},
       { path: 'complete-signup', component: () => import('pages/CompleteSignUp.vue') ,  name: 'COMPLETE-SIGNUP'},
+      { path: 'add-products', component: () => import('pages/AddProductPage.vue') ,  name: 'ADD-PRODUCT', meta: {needAuth: true}},
     ]
   },
 
