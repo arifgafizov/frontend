@@ -49,9 +49,9 @@
         filled
         type="file"
         hint="Native file"
-        :rules="[ val => !!val  || 'Поле не может быть пустым']"
+        :rules="[ val => !!val  || 'Нужно выбрать файл для загрузки']"
       />
-
+<!--TODO rules не работает правильно-->
 
       <br>
       <q-separator />
@@ -74,6 +74,7 @@ export default {
       weight: '',
       price: '',
       file: null,
+      extension: '',
     }
   },
   computed: {
@@ -84,21 +85,42 @@ export default {
   methods: {
     getDomain(file) {
       var arr = file.name.split('.')
-      var extension = arr[arr.length - 1]
-      if (['jpg', 'jpeg', 'png', 'tif', 'tiff', 'gif'].includes(extension)) {
+      this.extension = arr[arr.length - 1]
+      if (['jpg', 'jpeg', 'png', 'tif', 'tiff', 'gif'].includes(this.extension)) {
         return 'image'
-      } else if (['avi', 'mp4', 'mpeg', 'mod', '3gp', 'mkv'].includes(extension)) {
+      } else if (['avi', 'mp4', 'mpeg', 'mod', '3gp', 'mkv'].includes(this.extension)) {
         return 'video'
-      } else if (['pdf', 'doc', 'docx', 'txt'].includes(extension)) {
+      } else if (['pdf', 'doc', 'docx', 'txt'].includes(this.extension)) {
         return 'document'
       } else {
         alert('invalid format')
       }
     },
     onSubmit() {
-        var formData = new FormData();
+        //    сохранение в переменной токена авторизации полученного из localStorage
+        const token = localStorage.getItem('AUTH_TOKEN')
 
         var domain = this.getDomain(this.file)
+        var fileSize = this.file.size
+
+        //          отправка пост запроса с данными username и password из формы
+        this.$axios.post('/api/v1/jwt/token/', {
+          'domain': domain,
+          'extension': this.extension,
+          'file_size': fileSize,
+        }, {
+          headers: {
+            Authorization: "Token " + token
+          }
+        }).then((response) => {
+          console.log(response)
+
+        }).catch(function (error) {
+          console.log(error)
+          alert(error)
+        })
+
+        var formData = new FormData();
         console.log(this.file)
         formData.append("file", this.file);
 
@@ -108,18 +130,21 @@ export default {
           }
         }).then((response) => {
           console.log(response)
+          console.log(response.data.file)
+          var fileLink = response.data.file
 
         }).catch(function (error) {
           console.log(error)
           alert(error)
         })
+
       },
 
   },
 
 }
 </script>
-<!--TODO fileinput 1 axios получить токен  2 загрузить файл приложив токено и получить ссылку 3 Сохранить товар-->
+<!--TODO fileinput 1 axios получить токен, отправив домен, расширение и размер файла и положив потом токен в хедер аворизации  2 загрузить файл приложив токено и получить ссылку 3 Сохранить товар-->
 <style scoped>
 
 </style>
