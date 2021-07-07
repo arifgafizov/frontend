@@ -103,7 +103,7 @@ export default {
         var domain = this.getDomain(this.file)
         var fileSize = this.file.size
 
-        //          отправка пост запроса с данными username и password из формы
+        //          отправка пост запроса с данными файла и токеном авторизации для получения jwt токена
         this.$axios.post('/api/v1/jwt/token/', {
           'domain': domain,
           'extension': this.extension,
@@ -114,37 +114,39 @@ export default {
           }
         }).then((response) => {
           console.log(response)
+          var jwtToken = response.data.token
+          console.log(jwtToken)
+          // отправка пост запроса с файлом для получения ссылки хранения файла
+          var formData = new FormData();
+          console.log(this.file)
+          formData.append("file", this.file);
+
+          this.$axios.post('/upload/' + domain, formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              Authorization: jwtToken
+            }
+          }).then((response) => {
+            console.log(response)
+            var fileLink = response.data.file
+            console.log(fileLink)
+
+          }).catch(function (error) {
+            console.log(error)
+            alert(error)
+          })
 
         }).catch(function (error) {
           console.log(error)
           alert(error)
         })
-
-        var formData = new FormData();
-        console.log(this.file)
-        formData.append("file", this.file);
-
-        this.$axios.post('/upload/' + domain, formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          }
-        }).then((response) => {
-          console.log(response)
-          console.log(response.data.file)
-          var fileLink = response.data.file
-
-        }).catch(function (error) {
-          console.log(error)
-          alert(error)
-        })
-
       },
 
   },
 
 }
 </script>
-<!--TODO fileinput 1 axios получить токен, отправив домен, расширение и размер файла и положив потом токен в хедер аворизации  2 загрузить файл приложив токено и получить ссылку 3 Сохранить товар-->
+<!--TODO fileinput 1 axios получить токен, отправив домен, расширение и размер файла и положив потом токен в хедер аворизации  2 загрузить файл приложив jwt токен в header Authorization и получить ссылку 3 Сохранить товар-->
 <style scoped>
 
 </style>
