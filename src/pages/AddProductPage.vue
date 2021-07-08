@@ -131,6 +131,27 @@ export default {
             var fileLink = response.data.file
             console.log(fileLink)
 
+            //          отправка пост запроса с данными о товаре из формы
+            this.$axios.post('/api/v1/add-products', {
+                'title': this.title,
+                'description': this.description,
+                'weight': this.weight,
+                'price': this.price,
+                'file_link': fileLink
+              },
+              {
+                headers: {
+                  Authorization: "Token " + token
+                },
+              }
+            ).then((response) => {
+              console.log(response)
+
+            }).catch(function (error) {
+              console.log(error)
+              alert(error)
+            })
+
           }).catch(function (error) {
             console.log(error)
             alert(error)
