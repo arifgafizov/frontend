@@ -51,12 +51,13 @@
         hint="Native file"
         :rules="[ val => !!val  || 'Нужно выбрать файл для загрузки']"
       />
-<!--TODO rules не работает правильно-->
+      <!--TODO rules не работает правильно-->
 
       <br>
-      <q-separator />
-      <div  class="q-pa-md q-gutter-sm">
-        <q-btn @click.prevent="onSubmit" label="Отправить" type="submit" color="primary" glossy rounded :disable="!isFormValid"/>
+      <q-separator/>
+      <div class="q-pa-md q-gutter-sm">
+        <q-btn @click.prevent="onSubmit" label="Отправить" type="submit" color="primary" glossy rounded
+               :disable="!isFormValid"/>
       </div>
     </q-form>
 
@@ -97,77 +98,73 @@ export default {
       }
     },
     onSubmit() {
-        //    сохранение в переменной токена авторизации полученного из localStorage
-        const token = localStorage.getItem('AUTH_TOKEN')
+      //    сохранение в переменной токена авторизации полученного из localStorage
+      const token = localStorage.getItem('AUTH_TOKEN')
 
-        var domain = this.getDomain(this.file)
-        var fileSize = this.file.size
+      var domain = this.getDomain(this.file)
+      var fileSize = this.file.size
 
-        //          отправка пост запроса с данными файла и токеном авторизации для получения jwt токена
-        this.$axios.post('/api/v1/jwt/token/', {
-          'domain': domain,
-          'extension': this.extension,
-          'file_size': fileSize,
-        }, {
+      //          отправка пост запроса с данными файла и токеном авторизации для получения jwt токена
+      this.$axios.post('/api/v1/jwt/token/', {
+        'domain': domain,
+        'extension': this.extension,
+        'file_size': fileSize,
+      }, {
+        headers: {
+          Authorization: "Token " + token
+        }
+      }).then((response) => {
+        console.log(response)
+        var jwtToken = response.data.token
+        console.log(jwtToken)
+        // отправка пост запроса с файлом для получения ссылки хранения файла
+        var formData = new FormData();
+        console.log(this.file)
+        formData.append("file", this.file);
+
+        return this.$axios.post('/upload/' + domain, formData, {
           headers: {
-            Authorization: "Token " + token
+            'Content-Type': 'multipart/form-data',
+            Authorization: "Bearer " + jwtToken
           }
-        }).then((response) => {
+        })
+
+      })
+        .then((response) => {
           console.log(response)
-          var jwtToken = response.data.token
-          console.log(jwtToken)
-          // отправка пост запроса с файлом для получения ссылки хранения файла
-          var formData = new FormData();
-          console.log(this.file)
-          formData.append("file", this.file);
+          var fileLink = response.data.file
+          console.log(fileLink)
 
-          this.$axios.post('/upload/' + domain, formData, {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-              Authorization: jwtToken
-            }
-          }).then((response) => {
-            console.log(response)
-            var fileLink = response.data.file
-            console.log(fileLink)
-
-            //          отправка пост запроса с данными о товаре из формы
-            this.$axios.post('/api/v1/add-products', {
-                'title': this.title,
-                'description': this.description,
-                'weight': this.weight,
-                'price': this.price,
-                'file_link': fileLink
+          //          отправка пост запроса с данными о товаре из формы
+          return this.$axios.post('/api/v1/add-products', {
+              'title': this.title,
+              'description': this.description,
+              'weight': this.weight,
+              'price': this.price,
+              'file_link': fileLink
+            },
+            {
+              headers: {
+                Authorization: "Token " + token
               },
-              {
-                headers: {
-                  Authorization: "Token " + token
-                },
-              }
-            ).then((response) => {
-              console.log(response)
+            }
+          )
 
-            }).catch(function (error) {
-              console.log(error)
-              alert(error)
-            })
+        }).then((response) => {
+        console.log(response)
 
-          }).catch(function (error) {
-            console.log(error)
-            alert(error)
-          })
-
-        }).catch(function (error) {
+      })
+        .catch(function (error) {
           console.log(error)
           alert(error)
         })
-      },
+    },
 
   },
 
 }
 </script>
-<!--TODO fileinput 1 axios получить токен, отправив домен, расширение и размер файла и положив потом токен в хедер аворизации  2 загрузить файл приложив jwt токен в header Authorization и получить ссылку 3 Сохранить товар-->
+
 <style scoped>
 
 </style>
