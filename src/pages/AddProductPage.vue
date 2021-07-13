@@ -75,7 +75,6 @@ export default {
       weight: '',
       price: '',
       file: null,
-      extension: '',
     }
   },
   computed: {
@@ -86,12 +85,12 @@ export default {
   methods: {
     getDomain(file) {
       var arr = file.name.split('.')
-      this.extension = arr[arr.length - 1]
-      if (['jpg', 'jpeg', 'png', 'tif', 'tiff', 'gif'].includes(this.extension)) {
+      var extension = arr[arr.length - 1]
+      if (['jpg', 'jpeg', 'png', 'tif', 'tiff', 'gif'].includes(extension)) {
         return 'image'
-      } else if (['avi', 'mp4', 'mpeg', 'mod', '3gp', 'mkv'].includes(this.extension)) {
+      } else if (['avi', 'mp4', 'mpeg', 'mod', '3gp', 'mkv'].includes(extension)) {
         return 'video'
-      } else if (['pdf', 'doc', 'docx', 'txt'].includes(this.extension)) {
+      } else if (['pdf', 'doc', 'docx', 'txt'].includes(extension)) {
         return 'document'
       } else {
         alert('invalid format')
@@ -103,11 +102,13 @@ export default {
 
       var domain = this.getDomain(this.file)
       var fileSize = this.file.size
+      var arr = this.file.name.split('.')
+      var extension = arr[arr.length - 1]
 
       //          отправка пост запроса с данными файла и токеном авторизации для получения jwt токена
       this.$axios.post('/api/v1/jwt/token/', {
         'domain': domain,
-        'extension': this.extension,
+        'extension': extension,
         'file_size': fileSize,
       }, {
         headers: {
