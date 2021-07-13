@@ -48,6 +48,9 @@
           <router-link :to="{ name: 'CART'}">
             <q-tab name="cart" icon="shopping_cart" label="Корзина"/>
           </router-link>
+          <router-link v-if="isSuperuser" :to="{ name: 'ADD-PRODUCT'}">
+            <q-tab name="add-products" icon="save" label="Добавить товар"/>
+          </router-link>
         </template>
 
       </q-tabs>
@@ -277,6 +280,7 @@ export default {
       middle_name: '',
       phone_number: '',
       address: '',
+      isSuperuser: false,
 
       accept: false,
       tab: 'login',
@@ -385,6 +389,7 @@ export default {
     })
       .then(({data}) => {
         console.debug(data)
+        this.isSuperuser = data.is_superuser
         this.checkAuthLoading = false
       }).catch((err) => {
       if (err.response?.status === 401) {
