@@ -137,7 +137,7 @@ export default {
           console.log(fileLink)
 
           //          отправка пост запроса с данными о товаре из формы
-          return this.$axios.post('/api/v1/add-products', {
+          return this.$axios.post('/api/v1/crud-products/', {
               'title': this.title,
               'description': this.description,
               'weight': this.weight,
