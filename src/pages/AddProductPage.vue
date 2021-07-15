@@ -1,6 +1,7 @@
 <template>
   <q-page>
-    <q-toolbar-title>Добавить товар</q-toolbar-title>
+    <q-toolbar-title v-if="this.$router.currentRoute.name === 'ADD-PRODUCT'">Добавить товар</q-toolbar-title>
+    <q-toolbar-title v-else-if="this.$router.currentRoute.name === 'EDIT-PRODUCT'">Обновить товар</q-toolbar-title>
     <q-form
       @submit="onSubmit"
       class="q-gutter-md" style="max-width: 800px"
@@ -162,7 +163,30 @@ export default {
     },
 
   },
+  created() {
+     // если это роутер обновления товара то запросить данные о товаре
+    if (this.$router.currentRoute.name === 'EDIT-PRODUCT') {
+      // получение id товара
+      var id = this.$router.currentRoute.params.id
+      this.$axios.get('/api/v1/products/' + id
+      ).then(response => {
+        console.log(response)
+//          сохранение данных о товаре полученного из response data results
+        this.title = response.data.title
+        this.description = response.data.description
+        this.price = response.data.price
+        this.weight = response.data.weight || 'вес не определен'
+        this.file = response.data.file_link
 
+      }).catch((err) => {
+        if (err.response?.status === 404) {
+          this.isExist = false
+        } else {
+          alert(err.response.status + " " + err.response.statusText)
+        }
+      })
+    }
+  }
 }
 </script>
 
