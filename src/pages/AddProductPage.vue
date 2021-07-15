@@ -137,7 +137,8 @@ export default {
           var fileLink = response.data.file
           console.log(fileLink)
 
-          //          отправка пост запроса с данными о товаре из формы
+          if (this.$router.currentRoute.name === 'ADD-PRODUCT') {
+            //          отправка пост запроса с данными о товаре из формы
           return this.$axios.post('/api/v1/crud-products/', {
               'title': this.title,
               'description': this.description,
@@ -150,7 +151,24 @@ export default {
                 Authorization: "Token " + token
               },
             }
-          )
+          )}
+
+          else if (this.$router.currentRoute.name === 'EDIT-PRODUCT') {
+            var id = this.$router.currentRoute.params.id
+            //          отправка пут запроса с данными о товаре из формы
+          return this.$axios.put('/api/v1/crud-products/' + id + '/', {
+              'title': this.title,
+              'description': this.description,
+              'weight': this.weight,
+              'price': this.price,
+              'file_link': fileLink
+            },
+            {
+              headers: {
+                Authorization: "Token " + token
+              },
+            }
+          )}
 
         }).then((response) => {
         console.log(response)
