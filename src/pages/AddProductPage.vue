@@ -68,6 +68,7 @@
 <script>
 
 export default {
+
   name: "AddProductPage",
   data() {
     return {
@@ -84,6 +85,15 @@ export default {
     }
   },
   methods: {
+    showNotif(message) {
+      this.$q.notify({
+        type: 'negative',
+        position: 'center',
+        message: message,
+        icon: 'announcement'
+      })
+    },
+
     getDomain(file) {
       var arr = file.name.split('.')
       var extension = arr[arr.length - 1]
@@ -139,50 +149,50 @@ export default {
 
           if (this.$router.currentRoute.name === 'ADD-PRODUCT') {
             //          отправка пост запроса с данными о товаре из формы
-          return this.$axios.post('/api/v1/crud-products/', {
-              'title': this.title,
-              'description': this.description,
-              'weight': this.weight,
-              'price': this.price,
-              'file_link': fileLink
-            },
-            {
-              headers: {
-                Authorization: "Token " + token
+            return this.$axios.post('/api/v1/crud-products/', {
+                'title': this.title,
+                'description': this.description,
+                'weight': this.weight,
+                'price': this.price,
+                'file_link': fileLink
               },
-            }
-          )}
-
-          else if (this.$router.currentRoute.name === 'EDIT-PRODUCT') {
+              {
+                headers: {
+                  Authorization: "Token " + token
+                },
+              }
+            )
+          } else if (this.$router.currentRoute.name === 'EDIT-PRODUCT') {
             var id = this.$router.currentRoute.params.id
             //          отправка пут запроса с данными о товаре из формы
-          return this.$axios.put('/api/v1/crud-products/' + id + '/', {
-              'title': this.title,
-              'description': this.description,
-              'weight': this.weight,
-              'price': this.price,
-              'file_link': fileLink
-            },
-            {
-              headers: {
-                Authorization: "Token " + token
+            return this.$axios.put('/api/v1/crud-products/' + id + '/', {
+                'title': this.title,
+                'description': this.description,
+                'weight': this.weight,
+                'price': this.price,
+                'file_link': fileLink
               },
-            }
-          )}
+              {
+                headers: {
+                  Authorization: "Token " + token
+                },
+              }
+            )
+          }
 
         }).then((response) => {
         console.log(response)
 
       })
-        .catch(function (error) {
+        .catch((error) => {
           console.log(error)
-          alert(error)
+          this.showNotif(error.toString())
         })
     },
 
   },
   created() {
-     // если это роутер обновления товара то запросить данные о товаре
+    // если это роутер обновления товара то запросить данные о товаре
     if (this.$router.currentRoute.name === 'EDIT-PRODUCT') {
       // получение id товара
       var id = this.$router.currentRoute.params.id
