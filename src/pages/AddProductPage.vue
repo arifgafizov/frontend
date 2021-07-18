@@ -52,6 +52,14 @@
         hint="Native file"
         :rules="[ val => !!val  || 'Нужно выбрать файл для загрузки']"
       />
+
+      <q-img
+        v-if="this.$router.currentRoute.name === 'EDIT-PRODUCT'"
+        :src="file_link"
+        basic
+        style="height: 540px; max-width: 550px"
+      >
+      </q-img>
       <!--TODO rules не работает правильно-->
 
       <br>
@@ -77,6 +85,7 @@ export default {
       weight: '',
       price: '',
       file: null,
+      file_link: '',
     }
   },
   computed: {
@@ -85,11 +94,11 @@ export default {
     }
   },
   methods: {
-    showNotif(message) {
+    showNotif() {
       this.$q.notify({
         type: 'negative',
         position: 'center',
-        message: message,
+        message: 'Error',
         icon: 'announcement'
       })
     },
@@ -186,7 +195,7 @@ export default {
       })
         .catch((error) => {
           console.log(error)
-          this.showNotif(error.toString())
+          this.showNotif()
         })
     },
 
@@ -204,7 +213,7 @@ export default {
         this.description = response.data.description
         this.price = response.data.price
         this.weight = response.data.weight || 'вес не определен'
-        this.file = response.data.file_link
+        this.file_link = response.data.file_link
 
       }).catch((err) => {
         if (err.response?.status === 404) {
