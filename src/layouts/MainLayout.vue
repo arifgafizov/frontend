@@ -280,7 +280,6 @@ export default {
       middle_name: '',
       phone_number: '',
       address: '',
-      isSuperuser: false,
 
       accept: false,
       tab: 'login',
@@ -292,7 +291,10 @@ export default {
   computed: {
     isAuth() {
       return this.$store.state.auth.isAuth;
-    }
+    },
+    isSuperuser() {
+      return this.$store.state.auth.isSuperuser;
+    },
   },
   // computed: mapState([
   //   // проксирует в this.isAuth доступ к store.state.isAuth
@@ -389,7 +391,8 @@ export default {
     })
       .then(({data}) => {
         console.debug(data)
-        this.isSuperuser = data.is_superuser
+        // вызов мутации setSuperuser из модуля auth для присвоения значения из data для isSuperuser
+        this.$store.commit('auth/setSuperuser', data.is_superuser)
         this.checkAuthLoading = false
       }).catch((err) => {
       if (err.response?.status === 401) {
