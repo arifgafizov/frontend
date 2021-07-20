@@ -1,7 +1,7 @@
 <template>
   <q-page>
-    <q-toolbar-title v-if="this.$router.currentRoute.name === 'ADD-PRODUCT'">Добавить товар</q-toolbar-title>
-    <q-toolbar-title v-else-if="this.$router.currentRoute.name === 'EDIT-PRODUCT'">Обновить товар</q-toolbar-title>
+    <q-toolbar-title v-if="!isEditable">Добавить товар</q-toolbar-title>
+    <q-toolbar-title v-else-if="isEditable">Обновить товар</q-toolbar-title>
     <q-form
       @submit="onSubmit"
       class="q-gutter-md" style="max-width: 800px"
@@ -54,13 +54,12 @@
       />
 
       <q-img
-        v-if="this.$router.currentRoute.name === 'EDIT-PRODUCT'"
+        v-if="isEditable"
         :src="file_link"
         basic
         style="height: 540px; max-width: 550px"
       >
       </q-img>
-      <!--TODO rules не работает правильно-->
 
       <br>
       <q-separator/>
@@ -86,11 +85,15 @@ export default {
       price: '',
       file: null,
       file_link: '',
+      id: null
     }
   },
   computed: {
     isFormValid() {
       return !!this.title && !!this.description && !!this.weight && !!this.price && !!this.file
+    },
+    isEditable() {
+      return this.$router.currentRoute.name === 'EDIT-PRODUCT'
     }
   },
   methods: {
@@ -155,39 +158,25 @@ export default {
           console.log(response)
           var fileLink = response.data.file
           console.log(fileLink)
+          var put_url = '/api/v1/crud-products/' + this.id + '/'
+          var post_url = '/api/v1/crud-products/'
 
-          if (this.$router.currentRoute.name === 'ADD-PRODUCT') {
-            //          отправка пост запроса с данными о товаре из формы
-            return this.$axios.post('/api/v1/crud-products/', {
-                'title': this.title,
-                'description': this.description,
-                'weight': this.weight,
-                'price': this.price,
-                'file_link': fileLink
-              },
-              {
-                headers: {
-                  Authorization: "Token " + token
-                },
-              }
-            )
-          } else if (this.$router.currentRoute.name === 'EDIT-PRODUCT') {
-            var id = this.$router.currentRoute.params.id
-            //          отправка пут запроса с данными о товаре из формы
-            return this.$axios.put('/api/v1/crud-products/' + id + '/', {
-                'title': this.title,
-                'description': this.description,
-                'weight': this.weight,
-                'price': this.price,
-                'file_link': fileLink
-              },
-              {
-                headers: {
-                  Authorization: "Token " + token
-                },
-              }
-            )
-          }
+          // если это роутер обновления товара, то отправка PUT запроса с данными о товаре из формы с токеном
+          // если это роутер добавления товара, то отправка POST запроса с данными о товаре из формы с токеном
+          return this.$axios({
+            method: this.isEditable ? 'put' : 'post',
+            url: this.isEditable ? put_url : post_url,
+            data: {
+              'title': this.title,
+              'description': this.description,
+              'weight': this.weight,
+              'price': this.price,
+              'file_link': fileLink
+            },
+            headers: {
+              Authorization: "Token " + token
+            },
+          })
 
         }).then((response) => {
         console.log(response)
@@ -202,10 +191,10 @@ export default {
   },
   created() {
     // если это роутер обновления товара то запросить данные о товаре
-    if (this.$router.currentRoute.name === 'EDIT-PRODUCT') {
+    if (this.isEditable) {
       // получение id товара
-      var id = this.$router.currentRoute.params.id
-      this.$axios.get('/api/v1/products/' + id
+      this.id = this.$router.currentRoute.params.id
+      this.$axios.get('/api/v1/products/' + this.id
       ).then(response => {
         console.log(response)
 //          сохранение данных о товаре полученного из response data results
