@@ -14,7 +14,8 @@ Vue.use(Vuex)
 const auth = {
   namespaced: true,
   state: () => ({
-    isAuth: !!localStorage.getItem('AUTH_TOKEN')
+    isAuth: !!localStorage.getItem('AUTH_TOKEN'),
+    isSuperuser: false
   }),
   mutations: {
     setAuth (state, value) {
@@ -24,6 +25,9 @@ const auth = {
       if (!state.isAuth) {
         this.$router.push({ name: "PRODUCTS_LIST"})
       }
+    },
+    setSuperuser (state, value) {
+      state.isSuperuser = value
     }
   },
   actions: {
